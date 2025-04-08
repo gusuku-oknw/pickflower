@@ -3,10 +3,16 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
     "paths": {
+      "tamagui": ["./node_modules/tamagui/*"],
+      "@tamagui/config": ["./node_modules/@tamagui/config/*"],
+      "@my/config": ["./packages/config/src/tamagui.config.ts"],
       "app/*": ["./packages/app/*"],
       "@my/ui/*": ["./packages/ui/*"]
-    }
+    },
+    "skipLibCheck": true,
+    "strict": true
   },
   "extends": "./tsconfig.base",
   "exclude": [
@@ -16,5 +22,6 @@
     "apps/next/out",
     "apps/next/.next",
     "apps/next/.tamagui"
-  ]
+  ],
+  "include": ["**/*.ts", "**/*.tsx"]
 }

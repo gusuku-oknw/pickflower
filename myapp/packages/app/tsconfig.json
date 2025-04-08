@@ -5,6 +5,7 @@
     "composite": true,
     "jsx": "react-jsx",
     "paths": {
+      "@my/config": ["tamagui.config.ts"],
       "app/*": ["./packages/app/*"],
       "@my/ui/*": ["./packages/ui/*"]
     }
