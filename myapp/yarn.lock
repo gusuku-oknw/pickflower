@@ -7715,6 +7715,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-64@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "base-64@npm:0.1.0"
+  checksum: 10/5a42938f82372ab5392cbacc85a5a78115cbbd9dbef9f7540fa47d78763a3a8bd7d598475f0d92341f66285afd377509851a9bb5c67bbecb89686e9255d5b3eb
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.2.3, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -13158,6 +13165,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwt-decode@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "jwt-decode@npm:3.1.2"
+  checksum: 10/20a4b072d44ce3479f42d0d2c8d3dabeb353081ba4982e40b83a779f2459a70be26441be6c160bfc8c3c6eadf9f6380a036fbb06ac5406b5674e35d8c4205eeb
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -14233,6 +14247,7 @@ __metadata:
     eslint: "npm:^9.3.0"
     husky: "npm:^9.1.6"
     prettier: "npm:^3.3.3"
+    react-native-auth0: "npm:^4.4.0"
     turbo: "npm:^1.13.4"
     typescript: "npm:^5.6.2"
     ultra-runner: "npm:^3.10.5"
@@ -15430,6 +15445,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-quick@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "prettier-quick@npm:0.0.5"
+  checksum: 10/31b6117dfa5e9e5585949e7c358faddbbe07320eba4e87d7db0ae943861288a8e703a9da81c1da0395233f49297489376876ef84324d06e37f7beae4a07bd89c
+  languageName: node
+  linkType: hard
+
 "prettier@npm:^3.3.3":
   version: 3.5.2
   resolution: "prettier@npm:3.5.2"
@@ -15787,6 +15809,26 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
+  languageName: node
+  linkType: hard
+
+"react-native-auth0@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "react-native-auth0@npm:4.4.0"
+  dependencies:
+    base-64: "npm:^0.1.0"
+    jwt-decode: "npm:^3.1.2"
+    prettier-quick: "npm:^0.0.5"
+    prop-types: "npm:^15.8.1"
+    url: "npm:^0.11.4"
+  peerDependencies:
+    expo: ">=48.0.0"
+    react: ^16.11.0 || ^17 || ^18
+    react-native: ">=0.65.0 <1.0.x"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 10/31f1e376651e11512e9153a93e3dce4711fa0ce2a79d970d556975cee4975360c4a268e03f8e3c44b1cdc390411266b33d2e0c88928bc0b10fec45c672a73107
   languageName: node
   linkType: hard
 
@@ -18611,7 +18653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:^0.11.0":
+"url@npm:^0.11.0, url@npm:^0.11.4":
   version: 0.11.4
   resolution: "url@npm:0.11.4"
   dependencies:
