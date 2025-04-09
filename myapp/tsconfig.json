@@ -9,7 +9,8 @@
       "@tamagui/config": ["./node_modules/@tamagui/config/*"],
       "@my/config": ["./packages/config/src/tamagui.config.ts"],
       "app/*": ["./packages/app/*"],
-      "@my/ui/*": ["./packages/ui/*"]
+      "@my/ui/*": ["./packages/ui/*"],
+      "@packages/auth-next/*": ["./packages/auth-next/*"]
     },
     "skipLibCheck": true,
     "strict": true

@@ -8,7 +8,7 @@
       "@my/config": ["tamagui.config.ts"],
       "app/*": ["./packages/app/*"],
       "@my/ui/*": ["./packages/ui/*"],
-      "@packages/*": ["../../../../packages/*"],
+      "@packages/auth-next/*": ["./packages/auth-next/*"],
     }
   },
   "references": []
