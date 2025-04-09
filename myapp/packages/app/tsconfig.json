@@ -7,7 +7,8 @@
     "paths": {
       "@my/config": ["tamagui.config.ts"],
       "app/*": ["./packages/app/*"],
-      "@my/ui/*": ["./packages/ui/*"]
+      "@my/ui/*": ["./packages/ui/*"],
+      "@packages/*": ["../../../../packages/*"],
     }
   },
   "references": []

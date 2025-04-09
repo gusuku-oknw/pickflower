@@ -33,7 +33,9 @@
     "react-native-web": "~0.19.12"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^4.4.2",
     "@babel/runtime": "^7.24.6",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@tamagui/cli": "^1.125.33",
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",

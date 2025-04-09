@@ -7,7 +7,7 @@ import { YStack, Paragraph, Button } from 'tamagui'
 export function LogoutScreen() {
   const handleLogout = () => {
     // ここにログアウト処理を追加してください
-    // 例: next-auth を使っている場合は signOut() を呼び出す
+    // 例: next-auth-native を使っている場合は signOut() を呼び出す
     // signOut({ redirect: true, callbackUrl: '/' })
     console.log('ログアウト処理を実行中...')
   }
