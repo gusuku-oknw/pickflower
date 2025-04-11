@@ -1,5 +1,5 @@
 {
-  "name": "myapp",
+  "name": "frontapp",
   "private": true,
   "workspaces": [
     "./apps/*",
@@ -34,13 +34,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.24.6",
-    "@react-native-async-storage/async-storage": "^2.1.2",
-    "@tamagui/cli": "^1.125.33",
+    "@tamagui/cli": "^1.125.34",
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",
     "husky": "^9.1.6",
     "prettier": "^3.3.3",
-    "react-native-auth0": "^4.4.0",
     "turbo": "^1.13.4",
     "typescript": "^5.6.2",
     "ultra-runner": "^3.10.5",

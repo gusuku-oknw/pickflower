@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "tamagui": ["./node_modules/tamagui/*"],
+      "@tamagui/config": ["./node_modules/@tamagui/config/*"],
+      "@my/config": ["./packages/config/src/tamagui.config.ts"],
+      "app/*": ["./packages/app/*"],
+      "@my/ui/*": ["./packages/ui/*"],
+      "@packages/auth-next/*": ["./packages/auth-next/*"]
+    },
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "extends": "./tsconfig.base",
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/types",
+    "apps/next/out",
+    "apps/next/.next",
+    "apps/next/.tamagui"
+  ],
+  "include": ["**/*.ts", "**/*.tsx"]
+}
