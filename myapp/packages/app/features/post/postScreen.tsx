@@ -34,85 +34,122 @@ import {
   useToastController,
 } from '@tamagui/toast'
 
+/* ====================== 型定義 ====================== */
+type UploadedImage = {
+  file: File   // プレビュー用
+  url:  string // サーバ保存先 (/uploads/xxx.jpg)
+}
+
+/* =================================================== */
 export function PostScreen() {
-  /* ──────────────────── state & refs ──────────────────── */
-  const [mediaFiles, setMediaFiles] = useState<File[]>([])
-  const [caption, setCaption] = useState('')
-  const [location, setLocation] = useState('')
+  /* ─────────── state & refs ─────────── */
+  const [caption, setCaption]     = useState('')
+  const [location, setLocation]   = useState('')
   const [activeTab, setActiveTab] = useState<'camera' | 'gallery'>('camera')
+
   const [uploadProgress, setUploadProgress] = useState(0)
-  const [uploading, setUploading] = useState(false)
+  const [uploading, setUploading]           = useState(false)
+
+  const [mediaFiles, setMediaFiles] = useState<UploadedImage[]>([])
 
   const galleryInputRef = useRef<HTMLInputElement>(null)
-  const cameraInputRef = useRef<HTMLInputElement>(null)
-  const toast = useToastController()
+  const cameraInputRef  = useRef<HTMLInputElement>(null)
+  const toast           = useToastController()
 
-  /* ──────────────────── upload simulation ──────────────────── */
+  /* ─────────── upload animation ─────────── */
   useEffect(() => {
     if (uploading && uploadProgress < 100) {
-      const timer = setTimeout(
-        () => setUploadProgress((p) => Math.min(p + 10, 100)),
-        300,
-      )
-      return () => clearTimeout(timer)
+      const t = setTimeout(() => setUploadProgress(p => Math.min(p + 10, 100)), 300)
+      return () => clearTimeout(t)
     }
-
     if (uploading && uploadProgress === 100) {
       setUploading(false)
       setUploadProgress(0)
-      toast.show('投稿が完了しました', {
-        message: 'フォロワーに表示されます',
-        duration: 3000,
-      })
+      toast.show('投稿が完了しました', { message: 'フォロワーに表示されます', duration: 3000 })
       setMediaFiles([])
       setCaption('')
       setLocation('')
     }
   }, [uploading, uploadProgress, toast])
 
-  /* ──────────────────── handlers ──────────────────── */
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []).filter((f) =>
-      f.type.startsWith('image/'),
-    )
+  /* =============== 画像追加 =============== */
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []).filter(f => f.type.startsWith('image/'))
     if (files.length === 0) return
-    setMediaFiles((prev) => [...prev, ...files])
-    toast.show('画像が追加されました', {
-      message: `${files.length} 枚の画像を追加しました`,
-      duration: 2000,
-    })
+
+    try {
+      const uploaded: UploadedImage[] = await Promise.all(
+        files.map(async (file) => {
+          const fd = new FormData()
+          fd.append('file', file)                // FastAPI 側は "file" を期待
+
+          const res = await fetch('http://localhost:8000/upload', {
+            method: 'POST',
+            body: fd,
+          })
+          if (!res.ok) throw new Error('upload failed')
+
+          const { url } = await res.json() as { url: string }
+          return { file, url }                   // ここで {file, url} を返す
+        })
+      )
+
+      setMediaFiles(prev => [...prev, ...uploaded])
+
+      toast.show('画像が追加されました', {
+        message: `${uploaded.length} 枚の画像をアップロードしました`,
+        duration: 2000,
+      })
+    } catch (err) {
+      console.error(err)
+      toast.show('アップロードに失敗しました', { duration: 3000, native: true })
+    }
   }
 
-  const removeImage = (idx: number) =>
-    setMediaFiles((prev) => prev.filter((_, i) => i !== idx))
+  /* =============== 画像削除 =============== */
+  const removeImage = async (idx: number) => {
+    const target = mediaFiles[idx]
+    if (!target) return
+    try {
+      // FastAPI に削除エンドポイントを用意している場合はそちらへ
+      const res = await fetch(`http://localhost:8000/delete?path=${encodeURIComponent(target.url)}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('delete failed')
+      setMediaFiles(prev => prev.filter((_, i) => i !== idx))
+    } catch (err) {
+      console.error(err)
+      toast.show('削除に失敗しました', { duration: 3000, native: true })
+    }
+  }
 
+  /* =============== 投稿 =============== */
   const handlePost = async () => {
     if (mediaFiles.length === 0) {
-      toast.show('画像が必要です', {
-        message: '少なくとも1枚の画像を追加してください',
-        duration: 3000,
-        native: true,
-      })
+      toast.show('画像が必要です', { message: '少なくとも1枚の画像を追加してください', duration: 3000, native: true })
       return
     }
-
     setUploading(true)
 
-    /* ここで実際のアップロードを実装
-    const formData = new FormData()
-    mediaFiles.forEach((f, i) => formData.append(`media${i}`, f))
-    formData.append('caption', caption)
-    formData.append('location', location)
+    const body = JSON.stringify({
+      images:  mediaFiles.map(m => m.url),
+      caption,
+      location,
+    })
+
     try {
-      await fetch('/api/insta/upload', { method: 'POST', body: formData })
-    } catch (e) {
+      await fetch('/api/insta/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+      })
+    } catch {
       toast.show('投稿に失敗しました', { message: '再度お試しください', native: true })
       setUploading(false)
     }
-    */
   }
 
-  /* ──────────────────── UI ──────────────────── */
+  /* =============== UI =============== */
   return (
     <ToastProvider swipeDirection="right">
       <YStack flex={1} backgroundColor="$background" padding="$4">
@@ -125,45 +162,28 @@ export function PostScreen() {
 
           <Separator />
 
-          {/* tab switch (Camera first) */}
-          <XStack
-            backgroundColor="$gray3"
-            borderRadius="$6"
-            overflow="hidden"
-            marginVertical="$2"
-          >
-            <Button
-              flex={1}
-              size="$4"
-              backgroundColor={activeTab === 'camera' ? '$color5' : 'transparent'}
-              color={activeTab === 'camera' ? '$color12' : '$color11'}
-              onPress={() => setActiveTab('camera')}
-              borderRadius={0}
-              fontWeight={activeTab === 'camera' ? '600' : '400'}
-            >
-              <XStack space="$2" alignItems="center">
-                <Camera size="$1" />
-                <Text>カメラ</Text>
-              </XStack>
-            </Button>
-
-            <Button
-              flex={1}
-              size="$4"
-              backgroundColor={activeTab === 'gallery' ? '$color5' : 'transparent'}
-              color={activeTab === 'gallery' ? '$color12' : '$color11'}
-              onPress={() => setActiveTab('gallery')}
-              borderRadius={0}
-              fontWeight={activeTab === 'gallery' ? '600' : '400'}
-            >
-              <XStack space="$2" alignItems="center">
-                <ImageIcon size="$1" />
-                <Text>ギャラリー</Text>
-              </XStack>
-            </Button>
+          {/* tab switch */}
+          <XStack backgroundColor="$gray3" borderRadius="$6" overflow="hidden" marginVertical="$2">
+            {(['camera', 'gallery'] as const).map(tab => (
+              <Button
+                key={tab}
+                flex={1}
+                size="$4"
+                backgroundColor={activeTab === tab ? '$color5' : 'transparent'}
+                color={activeTab === tab ? '$color12' : '$color11'}
+                onPress={() => setActiveTab(tab)}
+                borderRadius={0}
+                fontWeight={activeTab === tab ? '600' : '400'}
+              >
+                <XStack space="$2" alignItems="center">
+                  {tab === 'camera' ? <Camera size="$1" /> : <ImageIcon size="$1" />}
+                  <Text>{tab === 'camera' ? 'カメラ' : 'ギャラリー'}</Text>
+                </XStack>
+              </Button>
+            ))}
           </XStack>
 
-          {/* main picker area */}
+          {/* picker area */}
           <YStack
             borderWidth={1}
             borderColor="$gray5"
@@ -177,26 +197,16 @@ export function PostScreen() {
           >
             {mediaFiles.length === 0 ? (
               <>
-                <Circle
-                  size={80}
-                  backgroundColor="$gray3"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  {activeTab === 'camera' ? (
-                    <Camera size="$5" color="$gray11" />
-                  ) : (
-                    <ImageIcon size="$5" color="$gray11" />
-                  )}
+                <Circle size={80} backgroundColor="$gray3" alignItems="center" justifyContent="center">
+                  {activeTab === 'camera'
+                    ? <Camera size="$5" color="$gray11" />
+                    : <ImageIcon size="$5" color="$gray11" />}
                 </Circle>
 
                 <YStack alignItems="center" space="$2">
                   <Paragraph color="$gray11">
-                    {activeTab === 'camera'
-                      ? 'カメラで撮影してください'
-                      : 'ギャラリーから画像を選択'}
+                    {activeTab === 'camera' ? 'カメラで撮影してください' : 'ギャラリーから画像を選択'}
                   </Paragraph>
-
                   <Button
                     size="$3"
                     theme="blue"
@@ -217,7 +227,6 @@ export function PostScreen() {
                   <Text color="$gray11" fontSize="$3" fontWeight="500">
                     選択済み: {mediaFiles.length} 枚
                   </Text>
-
                   <Button
                     size="$2"
                     theme="blue"
@@ -234,8 +243,9 @@ export function PostScreen() {
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <XStack space="$3" padding="$2.5">
-                    {mediaFiles.map((file, idx) => (
+                    {mediaFiles.map(({ file }, idx) => (
                       <Stack key={idx} position="relative">
+                        {/* ← ここを file で参照 */}
                         <TImage
                           source={{ uri: URL.createObjectURL(file) }}
                           width={120}
@@ -310,13 +320,7 @@ export function PostScreen() {
             <Sheet.Overlay backgroundColor="$color1" opacity={0.5} />
             <Sheet.Frame padding="$4" alignItems="center" justifyContent="center">
               <YStack space="$4" width="100%" alignItems="center">
-                <Stack
-                  width="100%"
-                  height={6}
-                  backgroundColor="$gray4"
-                  borderRadius="$10"
-                  overflow="hidden"
-                >
+                <Stack width="100%" height={6} backgroundColor="$gray4" borderRadius="$10" overflow="hidden">
                   <Stack
                     colors={['$blue8', '$purple8']}
                     start={[0, 0]}
@@ -341,7 +345,6 @@ export function PostScreen() {
             marginTop="$2"
             borderRadius="$6"
           >
-            {/* gradient background layer */}
             <Stack
               position="absolute"
               top={0}
@@ -353,12 +356,7 @@ export function PostScreen() {
               zIndex={-1}
               pointerEvents="none"
             >
-              <Stack
-                colors={['$blue9', '$purple9']}
-                start={[0, 0]}
-                end={[1, 0]}
-                fullscreen
-              />
+              <Stack colors={['$blue9', '$purple9']} start={[0, 0]} end={[1, 0]} fullscreen />
             </Stack>
             投稿する
           </Button>
