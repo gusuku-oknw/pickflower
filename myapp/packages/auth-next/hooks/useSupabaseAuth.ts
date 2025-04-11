@@ -50,6 +50,8 @@ export const useSupabaseAuth = () => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       console.error('Sign In Error:', error.message, error);
+      // ここでエラーの内容に応じたメッセージを返すこともできます
+      // 例: error.message に "Email not confirmed" が含まれている場合、ユーザーにメールを確認するよう促す
       throw error;
     }
     return data.user;

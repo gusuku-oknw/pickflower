@@ -1,12 +1,28 @@
 // packages/app/features/profile/ProfileScreen.tsx
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react';
 import { YStack, Paragraph, Button, Avatar, Spinner } from 'tamagui'
 import { useSupabaseAuth } from '../../../../packages/auth-next/hooks/useSupabaseAuth'
 
 export function ProfileScreen() {
   const { user, loading, error, signIn, signOut } = useSupabaseAuth()
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSignIn = async () => {
+    try {
+      // 仮の値ですが、実際はフォームから入力値を取得
+      await signIn('derblack461@gmail.com', 'j8DJdHfE');
+      setErrorMessage(null);
+    } catch (error: any) {
+      // エラー内容に応じたメッセージを設定
+      if (error.message.includes("Email not confirmed")) {
+        setErrorMessage("メールアドレスの確認が完了していません。受信トレイの確認と確認リンクのクリックをお願いします。");
+      } else {
+        setErrorMessage("ログインに失敗しました。入力内容をご確認ください。");
+      }
+    }
+  };
 
   if (loading) {
     return (

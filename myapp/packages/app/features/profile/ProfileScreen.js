@@ -1,11 +1,28 @@
-System.register(["react/jsx-runtime", "tamagui", "../../../../packages/auth-next/hooks/useSupabaseAuth"], function (exports_1, context_1) {
+System.register(["react/jsx-runtime", "react", "tamagui", "../../../../packages/auth-next/hooks/useSupabaseAuth"], function (exports_1, context_1) {
     // packages/app/features/profile/ProfileScreen.tsx
     'use client';
     "use strict";
-    var jsx_runtime_1, tamagui_1, useSupabaseAuth_1;
+    var jsx_runtime_1, react_1, tamagui_1, useSupabaseAuth_1;
     var __moduleName = context_1 && context_1.id;
     function ProfileScreen() {
         const { user, loading, error, signIn, signOut } = useSupabaseAuth_1.useSupabaseAuth();
+        const [errorMessage, setErrorMessage] = react_1.useState(null);
+        const handleSignIn = async () => {
+            try {
+                // 仮の値ですが、実際はフォームから入力値を取得
+                await signIn('derblack461@gmail.com', 'j8DJdHfE');
+                setErrorMessage(null);
+            }
+            catch (error) {
+                // エラー内容に応じたメッセージを設定
+                if (error.message.includes("Email not confirmed")) {
+                    setErrorMessage("メールアドレスの確認が完了していません。受信トレイの確認と確認リンクのクリックをお願いします。");
+                }
+                else {
+                    setErrorMessage("ログインに失敗しました。入力内容をご確認ください。");
+                }
+            }
+        };
         if (loading) {
             return (_jsx(tamagui_1.YStack, { flex: 1, padding: "$4", alignItems: "center", justifyContent: "center", children: _jsx(tamagui_1.Spinner, {}) }));
         }
@@ -25,6 +42,9 @@ System.register(["react/jsx-runtime", "tamagui", "../../../../packages/auth-next
         setters: [
             function (jsx_runtime_1_1) {
                 jsx_runtime_1 = jsx_runtime_1_1;
+            },
+            function (react_1_1) {
+                react_1 = react_1_1;
             },
             function (tamagui_1_1) {
                 tamagui_1 = tamagui_1_1;
