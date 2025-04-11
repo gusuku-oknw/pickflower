@@ -11,7 +11,6 @@ import {
   Separator,
   View,
   H2,
-  Image,
   Paragraph,
   Tooltip
 } from 'tamagui'
@@ -20,9 +19,11 @@ import {
   X,
   Home,
   User,
+  Camera,
   Settings,
   Bell,
   Bookmark,
+  History,
   Moon,
   Sun,
   ChevronRight,
@@ -54,9 +55,10 @@ export const HamburgerMenu = () => {
 
   const primaryMenuItems = [
     { icon: Home, label: 'ホーム', route: '/' },
-    { icon: User, label: 'プロフィール', route: '/profile' },
-    { icon: Bell, label: '通知', route: '/notifications' },
-    { icon: Settings, label: '設定', route: '/settings' },
+    { icon: Camera, label: '投稿作成', route: '/post' }, // 投稿作成画面
+    { icon: History, label: '投稿履歴', route: '/history' }, // 投稿一覧・履歴
+    { icon: User, label: 'プロフィール', route: '/profile' }, // 農家さん情報など
+    { icon: Settings, label: '設定', route: '/settings' }, // Instagram連携など
   ]
 
   return (
