@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base",
+  "include": ["**/*.ts", "**/*.tsx", "../config/src/tamagui.config.ts"],
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx"
+  },
+  "paths": {
+    "@my/config": ["tamagui.config.ts"],
+    "app/*": ["./packages/app/*"],
+    "@my/ui/*": ["./packages/ui/*"],
+    "@packages/auth-next/*": ["./packages/auth-next/*"],
+  },
+  "references": []
+}
