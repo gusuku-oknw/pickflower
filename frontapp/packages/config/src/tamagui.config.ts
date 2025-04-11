@@ -2,6 +2,7 @@ import { defaultConfig } from '@tamagui/config/v4'
 import { createTamagui } from 'tamagui'
 import { bodyFont, headingFont } from './fonts'
 import { animations } from './animations'
+import { themes } from './themes'
 import { createTokens } from 'tamagui'
 
 const tokens = createTokens({
@@ -14,6 +15,7 @@ const tokens = createTokens({
 
 export const config = createTamagui({
   ...defaultConfig,
+  themes,
   animations,
   fonts: {
     body: bodyFont,
