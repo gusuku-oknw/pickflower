@@ -23,22 +23,25 @@ sample_history = [
         "caption": f"サンプル投稿 {i}",
         "imageUrl": f"https://picsum.photos/300/200?random={i}",
         "date": f"2023-10-{i:02d}",
-        "likes": 10 * i,
-        "comments": i,
-        "saved": i % 2 == 0,
+        "likes": 100 + i,
+        "comments": i * 3,
+        "saved": (i % 2 == 0),
     }
     for i in range(1, 31)
 ]
 
-@app.get("/api/history", tags=["posts"])
-async def get_history(
+@app.get("/api/history")
+def get_history(
     offset: int = Query(0, ge=0),
     limit : int = Query(5, ge=1, le=20),
 ):
-    """offset / limit でページング"""
+    """
+    offset / limit でデータを分割して返す。
+    limitはデフォルト5件、一度に最大20件までとする。
+    """
     end = offset + limit
     if offset >= len(sample_history):
-        return []          # もうデータなし
+        return []  # これ以上データはない
     return sample_history[offset:end]
 
 # アップロードディレクトリの定義
