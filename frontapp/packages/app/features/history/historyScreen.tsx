@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   YStack,
   Paragraph,
@@ -15,8 +16,7 @@ import {
   Separator,
   Sheet,
   Stack,
-  AnimatePresence,
-  Theme
+  Theme,
 } from 'tamagui'
 
 import {
@@ -31,39 +31,44 @@ import {
   Pen
 } from '@tamagui/lucide-icons'
 
-export function HistoryScreen() {
-  const [history, setHistory] = useState([
-    {
-      id: 1,
-      caption: '秋の風景。散歩中に見つけた公園の紅葉が美しかったので撮影してみました。',
-      imageUrl: '/sample1.jpg',
-      date: '2023-10-01',
-      likes: 128,
-      comments: 24,
-      saved: true
-    },
-    {
-      id: 2,
-      caption: 'カフェで優雅なランチタイム🍴 自家製パスタが絶品でした！',
-      imageUrl: '/sample2.jpg',
-      date: '2023-10-02',
-      likes: 87,
-      comments: 11,
-      saved: false
-    },
-    {
-      id: 3,
-      caption: '新しい投稿テスト。カメラの設定を変えて撮影してみました。この光の当たり方が好きです✨',
-      imageUrl: '/sample3.jpg',
-      date: '2023-10-03',
-      likes: 213,
-      comments: 32,
-      saved: true
-    },
-  ])
+type PostItem = {
+  id: number
+  caption: string
+  imageUrl: string
+  date: string
+  likes: number
+  comments: number
+  saved: boolean
+}
 
-  const [selectedPost, setSelectedPost] = useState<typeof history[0] | null>(null)
+export function HistoryScreen() {
+  // マイアカウント情報（例）
+  const myAccount = {
+    avatarUrl: '/avatar.jpg',
+    name: 'マイアカウント',
+  }
+
+  const [history, setHistory] = useState<PostItem[]>([])
+  const [selectedPost, setSelectedPost] = useState<PostItem | null>(null)
   const [showOptions, setShowOptions] = useState(false)
+
+  const router = useRouter()
+
+  // バックエンドから投稿情報を取得
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        // 実際にはご自身のエンドポイントに合わせてURLを変更してください
+        const res = await fetch('http://localhost:8000/api/history')
+        if (!res.ok) throw new Error('Failed to fetch')
+        const data: PostItem[] = await res.json()
+        setHistory(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchPosts()
+  }, [])
 
   const handleDeletePost = (id: number) => {
     setHistory(prev => prev.filter(item => item.id !== id))
@@ -73,7 +78,7 @@ export function HistoryScreen() {
   const toggleSaved = (id: number) => {
     setHistory(prev =>
       prev.map(item =>
-        item.id === id ? {...item, saved: !item.saved} : item
+        item.id === id ? { ...item, saved: !item.saved } : item
       )
     )
   }
@@ -175,11 +180,17 @@ export function HistoryScreen() {
                   {/* カードヘッダー */}
                   <XStack padding="$3" alignItems="center" justifyContent="space-between">
                     <XStack space="$2" alignItems="center">
-                      <Avatar circular size="$3" backgroundColor="$blue5">
-                        <Avatar.Image source={{ uri: '/avatar.jpg' }} />
+                      {/* アバターを押すと/Profile へ遷移 */}
+                      <Avatar
+                        circular
+                        size="$3"
+                        backgroundColor="blue"
+                        onPress={() => router.push('/Profile')}
+                      >
+                        <Avatar.Image source={{ uri: myAccount.avatarUrl }} />
                         <Avatar.Fallback backgroundColor="$blue9" />
                       </Avatar>
-                      <Text fontWeight="500">マイアカウント</Text>
+                      <Text fontWeight="500">{myAccount.name}</Text>
                     </XStack>
                     <Button
                       icon={MoreHorizontal}

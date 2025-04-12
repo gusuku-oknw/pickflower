@@ -1,22 +1,45 @@
+# app.py など -------------------------------
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import os
+import os, uuid
 from pathlib import Path
-import uuid
 
 app = FastAPI()
 
-# CORS 設定
-origins = [
-    "http://localhost:3000",  # Next.js 開発サーバーの URL
-]
+origins = ["http://localhost:3000"]          # ← Next.js 開発サーバ
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─────────────────────────────────────────────
+# テスト用ダミーデータを 30 件ほど用意
+sample_history = [
+    {
+        "id": i,
+        "caption": f"サンプル投稿 {i}",
+        "imageUrl": f"https://picsum.photos/300/200?random={i}",
+        "date": f"2023-10-{i:02d}",
+        "likes": 10 * i,
+        "comments": i,
+        "saved": i % 2 == 0,
+    }
+    for i in range(1, 31)
+]
+
+@app.get("/api/history", tags=["posts"])
+async def get_history(
+    offset: int = Query(0, ge=0),
+    limit : int = Query(5, ge=1, le=20),
+):
+    """offset / limit でページング"""
+    end = offset + limit
+    if offset >= len(sample_history):
+        return []          # もうデータなし
+    return sample_history[offset:end]
 
 # アップロードディレクトリの定義
 upload_dir = "uploads"
