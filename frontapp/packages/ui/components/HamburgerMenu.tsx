@@ -62,7 +62,7 @@ export const HamburgerMenu = () => {
   ]
 
   return (
-    <>
+    <Theme name="light">
       {/* オーバーレイ背景（メニュー開いたとき） */}
       <AnimatePresence>
         {isOpen && (
@@ -88,28 +88,29 @@ export const HamburgerMenu = () => {
         onPress={toggleMenu}
         circular
         size="$4"
-        bg={isOpen ? 'transparent' : '$background'}
-        pressStyle={{ scale: 0.9, opacity: 0.8 }}
+        // bg={isOpen ? 'transparent' : '$background'}
+        pressStyle={{ scale: 0.5, opacity: 0.5 }}
         animation="quick"
         zIndex={1001}
         borderWidth={1}
-        borderColor="$borderColor"
-        shadowColor="$shadowColor"
-        shadowOffset={{ width: 0, height: 2 }}
-        shadowOpacity={0.1}
-        shadowRadius={10}
+        // theme="blue"
+        // borderColor="$borderColor"
+        // shadowColor="$shadowColor"
+        // shadowOffset={{ width: 0, height: 2 }}
+        // shadowOpacity={0.1}
+        // shadowRadius={10}
       >
         {isOpen ? (
-          <X size="$3" color="$color12" />
+          <X size="$3" />
         ) : (
-          <Menu size="$3" color="$color12" />
+          <Menu size="$3" color="$white12" />
         )}
       </Button>
 
       {/* サイドメニュー */}
       <AnimatePresence>
         {isOpen && (
-          <Theme name={isDarkMode ? "dark" : "light"}>
+          <>
             <YStack
               position="fixed"
               top={0}
@@ -123,14 +124,14 @@ export const HamburgerMenu = () => {
               exitStyle={{ x: -320 }}
               animation="quick"
               x={0}
-              shadowColor="$shadowColor"
+              // shadowColor="$shadowColor"
               shadowOffset={{ width: 5, height: 0 }}
               shadowOpacity={0.2}
               shadowRadius={20}
             >
               {/* ヘッダー部分 */}
               <LinearGradient
-                colors={['$blue8', '#dddddd']}
+                colors={['light', '#dddddd']}
                 start={[0, 0]}
                 end={[1, 1]}
                 width="100%"
@@ -177,7 +178,7 @@ export const HamburgerMenu = () => {
                       <Text flex={1} fontSize="$4" fontWeight="500" color="$color12">
                         {item.label}
                       </Text>
-                      <ChevronRight size="$3" color="$color9" opacity={0.7} />
+                      <ChevronRight size="$3" opacity={0.7} />
                     </XStack>
                   </Button>
                 ))}
@@ -269,10 +270,10 @@ export const HamburgerMenu = () => {
                 </Paragraph>
               </YStack>
             </YStack>
-          </Theme>
+          </>
         )}
       </AnimatePresence>
-    </>
+    </Theme>
   )
 }
 
