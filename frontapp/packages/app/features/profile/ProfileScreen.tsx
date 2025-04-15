@@ -131,18 +131,18 @@ export function ProfileScreen() {
 
               <YStack flex={1} space="$1">
                 <H2 color="$color" fontWeight="bold">
-                  {user.user_metadata?.full_name || user.email?.split('@')[0] || 'ユーザー'}
+                  {userData?.username || 'ユーザー'}
                 </H2>
                 <XStack alignItems="center" space="$2">
                   <Leaf size="$1" color="$accent9" />
                   <Text color="$color" opacity={0.8}>
-                    {farmName}
+                    {userData?.farmname}
                   </Text>
                 </XStack>
                 <XStack alignItems="center" space="$2">
                   <MapPin size="$1" color="$accent9" />
                   <Text color="$color" opacity={0.8}>
-                    {location}
+                    {userData?.location}
                   </Text>
                 </XStack>
               </YStack>

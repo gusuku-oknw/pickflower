@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+// packages/app/features/menu/HamburgerMenu.tsx
+'use client'
+
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   YStack,
@@ -9,10 +12,11 @@ import {
   Theme,
   useTheme,
   Separator,
-  View,
   H2,
+  H3,
   Paragraph,
-  Tooltip, Avatar,
+  Tooltip,
+  Avatar
 } from 'tamagui'
 import {
   Menu,
@@ -21,35 +25,53 @@ import {
   User,
   Camera,
   Settings,
-  Bell,
-  Bookmark,
   History,
   Moon,
   Sun,
   ChevronRight,
   MailQuestion,
   ScrollText,
-  UserX
+  UserX,
+  FileEdit,
+  Leaf,
+  Calendar,
+  MapPin,
+  Mail,
+  Info,
+  Clock,
+  Tractor
 } from '@tamagui/lucide-icons'
 import { useRouter } from 'solito/navigation'
 import { LinearGradient } from 'tamagui/linear-gradient'
 import { useSupabaseAuth } from '../../auth-next/hooks/useSupabaseAuth'
+import { fetchUserData } from '../../supabase/dbService'
 
 export const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [userData, setUserData] = useState<any>(null)
+  const [isDataLoading, setIsDataLoading] = useState(false)
   const theme = useTheme()
   const router = useRouter()
   const { user, loading: authLoading } = useSupabaseAuth()
 
-  // Supabase のユーザー情報から myAccount を生成
-  const myAccount = {
-    // ユーザー情報に avatar_url があればその値、なければ public 内のローカルアバター ("/avatar") を利用
-    avatarUrl: user?.avatar_url || 'https://placehold.jp/300x200.png?text=User',
-    // ユーザー名（なければ "マイアカウント"）
-    email: user?.email || 'マイアカウント',
-    name: user?.name || 'マイアカウント',
-  }
+  // 初回だけデータベースからプロフィールデータを取得する（既に取得済みの場合は再取得しない）
+  useEffect(() => {
+    async function loadData() {
+      if (user && !userData) {
+        try {
+          setIsDataLoading(true)
+          const data = await fetchUserData(user.id)
+          setUserData(data)
+        } catch (err) {
+          console.error('データロード中のエラー:', err)
+        } finally {
+          setIsDataLoading(false)
+        }
+      }
+    }
+    loadData()
+  }, [user, userData])
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev)
@@ -66,11 +88,20 @@ export const HamburgerMenu = () => {
 
   const primaryMenuItems = [
     { icon: Home, label: 'ホーム', route: '/' },
-    { icon: Camera, label: '投稿作成', route: '/post' }, // 投稿作成画面
-    { icon: History, label: '投稿履歴', route: '/history' }, // 投稿一覧・履歴
-    { icon: User, label: 'プロフィール', route: '/profile' }, // 農家さん情報など
-    { icon: Settings, label: '設定', route: '/settings' }, // Instagram連携など
+    { icon: Camera, label: '投稿作成', route: '/post' },
+    { icon: History, label: '投稿履歴', route: '/history' },
+    { icon: User, label: 'プロフィール', route: '/profile' },
+    { icon: Settings, label: '設定', route: '/settings' }
   ]
+
+  // myAccount は認証情報からのフォールバック用。DBのデータがない場合に利用する
+  const myAccount = {
+    avatarUrl:
+      userData?.profile_image || user?.profile_image || 'https://placehold.jp/300x200.png?text=User',
+    // ユーザーネームは DB の username を優先、なければ認証情報の name（またはメール）を利用
+    name: userData?.username || user?.name || user?.email || 'ログインしていません',
+    email: user?.email || ''
+  }
 
   return (
     <Theme name="light">
@@ -99,23 +130,12 @@ export const HamburgerMenu = () => {
         onPress={toggleMenu}
         circular
         size="$4"
-        // bg={isOpen ? 'transparent' : '$background'}
         pressStyle={{ scale: 0.5, opacity: 0.5 }}
         animation="quick"
         zIndex={1001}
         borderWidth={1}
-        // theme="blue"
-        // borderColor="$borderColor"
-        // shadowColor="$shadowColor"
-        // shadowOffset={{ width: 0, height: 2 }}
-        // shadowOpacity={0.1}
-        // shadowRadius={10}
       >
-        {isOpen ? (
-          <X size="$3" />
-        ) : (
-          <Menu size="$3" color="$white12" />
-        )}
+        {isOpen ? <X size="$3" /> : <Menu size="$3" color="$white12" />}
       </Button>
 
       {/* サイドメニュー */}
@@ -135,7 +155,6 @@ export const HamburgerMenu = () => {
               exitStyle={{ x: -320 }}
               animation="quick"
               x={0}
-              // shadowColor="$shadowColor"
               shadowOffset={{ width: 5, height: 0 }}
               shadowOpacity={0.2}
               shadowRadius={20}
@@ -151,17 +170,17 @@ export const HamburgerMenu = () => {
                 paddingBottom="$6"
               >
                 <XStack alignItems="center" space="$3">
-                  <Avatar
-                    circular
-                    size="$5"
-                    backgroundColor="blue"
-                  >
+                  <Avatar circular size="$5" backgroundColor="blue">
                     <Avatar.Image source={{ uri: myAccount.avatarUrl }} />
                     <Avatar.Fallback backgroundColor="$blue9" />
                   </Avatar>
                   <YStack>
-                    <H2 color="white" fontWeight="600" fontSize="$5">{myAccount.name}</H2>
-                    <Paragraph color="$color1" opacity={0.9}>{myAccount.email}</Paragraph>
+                    <H2 color="white" fontWeight="600" fontSize="$5">
+                      {myAccount.name}
+                    </H2>
+                    <Paragraph color="$color1" opacity={0.9}>
+                      {myAccount.email}
+                    </Paragraph>
                   </YStack>
                 </XStack>
               </LinearGradient>
@@ -248,6 +267,7 @@ export const HamburgerMenu = () => {
                   </Tooltip.Content>
                 </Tooltip>
               </XStack>
+
               {/* フッター部分 */}
               <YStack padding="$3" space="$4">
                 <Separator />
