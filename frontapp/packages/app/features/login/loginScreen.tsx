@@ -53,7 +53,7 @@ export function LoginScreen() {
   }
 
   return (
-    <Theme name="accent">
+    <Theme name="light">
       <YStack
         flex={1}
         padding="$5"
