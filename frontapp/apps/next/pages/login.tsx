@@ -1,14 +1,15 @@
 'use client'
 
+import React from 'react'
 import { YStack } from 'tamagui'
-import { ProfileScreen } from 'app/features/profile/ProfileScreen'
+import { LoginScreen } from 'app/features/login/loginScreen'
 import HamburgerMenu from '@my/ui/components/HamburgerMenu' // エイリアス設定に合わせて
 
-export default function ProfilePage() {
+export default function logoutPage() {
   return (
     <YStack flex={1} padding="$4">
       <HamburgerMenu />
-      <ProfileScreen />
+      <LoginScreen />
     </YStack>
   )
 }

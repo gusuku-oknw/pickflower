@@ -12,7 +12,7 @@ import {
   View,
   H2,
   Paragraph,
-  Tooltip
+  Tooltip, Avatar,
 } from 'tamagui'
 import {
   Menu,
@@ -33,12 +33,23 @@ import {
 } from '@tamagui/lucide-icons'
 import { useRouter } from 'solito/navigation'
 import { LinearGradient } from 'tamagui/linear-gradient'
+import { useSupabaseAuth } from '../../auth-next/hooks/useSupabaseAuth'
 
 export const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const theme = useTheme()
   const router = useRouter()
+  const { user, loading: authLoading } = useSupabaseAuth()
+
+  // Supabase のユーザー情報から myAccount を生成
+  const myAccount = {
+    // ユーザー情報に avatar_url があればその値、なければ public 内のローカルアバター ("/avatar") を利用
+    avatarUrl: user?.avatar_url || 'https://placehold.jp/300x200.png?text=User',
+    // ユーザー名（なければ "マイアカウント"）
+    email: user?.email || 'マイアカウント',
+    name: user?.name || 'マイアカウント',
+  }
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev)
@@ -140,20 +151,17 @@ export const HamburgerMenu = () => {
                 paddingBottom="$6"
               >
                 <XStack alignItems="center" space="$3">
-                  <Stack
-                    width={50}
-                    height={50}
-                    borderRadius={25}
-                    backgroundColor="$color1"
-                    alignItems="center"
-                    justifyContent="center"
-                    overflow="hidden"
+                  <Avatar
+                    circular
+                    size="$5"
+                    backgroundColor="blue"
                   >
-                    <User size="$4" color="$color12" />
-                  </Stack>
+                    <Avatar.Image source={{ uri: myAccount.avatarUrl }} />
+                    <Avatar.Fallback backgroundColor="$blue9" />
+                  </Avatar>
                   <YStack>
-                    <H2 color="white" fontWeight="600" fontSize="$5">ゲスト</H2>
-                    <Paragraph color="$color1" opacity={0.9}>guest@example.com</Paragraph>
+                    <H2 color="white" fontWeight="600" fontSize="$5">{myAccount.name}</H2>
+                    <Paragraph color="$color1" opacity={0.9}>{myAccount.email}</Paragraph>
                   </YStack>
                 </XStack>
               </LinearGradient>
