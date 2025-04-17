@@ -15,6 +15,7 @@ import {
   Paragraph,
   Separator,
   Sheet,
+  Theme,
   ScrollView,
 } from 'tamagui'
 import {
@@ -151,6 +152,7 @@ export function PostScreen() {
 
   /* =============== UI =============== */
   return (
+    <Theme name="light">
     <ToastProvider swipeDirection="right">
       <YStack flex={1} backgroundColor="$background" padding="$4">
         <YStack space="$4" maxWidth={600} marginHorizontal="auto" width="100%">
@@ -169,8 +171,8 @@ export function PostScreen() {
                 key={tab}
                 flex={1}
                 size="$4"
-                backgroundColor={activeTab === tab ? '$color5' : 'transparent'}
-                color={activeTab === tab ? '$color12' : '$color11'}
+                bg={activeTab === tab ? '$accent5' : '$color0'}
+                color={activeTab === tab ? '$color1' : '$color1'}
                 onPress={() => setActiveTab(tab)}
                 borderRadius={0}
                 fontWeight={activeTab === tab ? '600' : '400'}
@@ -186,7 +188,7 @@ export function PostScreen() {
           {/* picker area */}
           <YStack
             borderWidth={1}
-            borderColor="$gray5"
+            borderColor="$color5"
             borderRadius="$6"
             backgroundColor="$gray1"
             padding="$5"
@@ -209,8 +211,8 @@ export function PostScreen() {
                   </Paragraph>
                   <Button
                     size="$3"
-                    theme="blue"
                     borderRadius="$6"
+                    bg="$accent5"
                     onPress={() =>
                       activeTab === 'camera'
                         ? cameraInputRef.current?.click()
@@ -295,6 +297,7 @@ export function PostScreen() {
               value={caption}
               onChangeText={setCaption}
               minHeight={100}
+              bg="$accent11"
               borderColor="$gray5"
               borderWidth={1}
               borderRadius="$4"
@@ -365,5 +368,6 @@ export function PostScreen() {
 
       <ToastViewport />
     </ToastProvider>
+    </Theme>
   )
 }

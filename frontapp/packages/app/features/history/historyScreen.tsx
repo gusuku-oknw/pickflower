@@ -56,7 +56,7 @@ const HistoryHeader: React.FC = () => (
       <H2 fontWeight="600">投稿履歴</H2>
       <XStack space="$2">
         <Button
-          icon={Calendar}
+          icon={<Calendar size="$2" />}
           circular
           chromeless
           size="$3"
@@ -119,10 +119,10 @@ const HistoryCard: React.FC<{
           <Text fontWeight="500">{myAccount.name}</Text>
         </XStack>
         <Button
-          icon={MoreHorizontal}
+          icon={<MoreHorizontal size="$2" />}
           circular
           chromeless
-          size="$2"
+          size="$3"
           onPress={() => onMorePress(post)}
         />
       </XStack>

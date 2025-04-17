@@ -105,6 +105,16 @@ export const HamburgerMenu = () => {
 
   return (
     <Theme name="light">
+      <YStack
+        position="sticky"
+        top={0}
+        left={0}
+        right={0}
+        height={80}  // ヘッダーの高さ
+        backgroundColor="$background"
+        zIndex={1000}
+        padding="$3"
+      >
       {/* オーバーレイ背景（メニュー開いたとき） */}
       <AnimatePresence>
         {isOpen && (
@@ -129,7 +139,7 @@ export const HamburgerMenu = () => {
       <Button
         onPress={toggleMenu}
         circular
-        size="$4"
+        size="$5"
         pressStyle={{ scale: 0.5, opacity: 0.5 }}
         animation="quick"
         zIndex={1001}
@@ -166,7 +176,7 @@ export const HamburgerMenu = () => {
                 end={[1, 1]}
                 width="100%"
                 padding="$10"
-                paddingTop="$10"
+                paddingTop="$12"
                 paddingBottom="$6"
               >
                 <XStack alignItems="center" space="$3">
@@ -192,7 +202,7 @@ export const HamburgerMenu = () => {
                     key={index}
                     onPress={() => navigateTo(item.route)}
                     bg="transparent"
-                    hoverStyle={{ bg: '$color3' }}
+                    hoverStyle={{ bg: '$accent11' }}
                     pressStyle={{ scale: 0.98, opacity: 0.9 }}
                     animation="quick"
                     justifyContent="flex-start"
@@ -274,7 +284,7 @@ export const HamburgerMenu = () => {
                 <Button
                   onPress={toggleTheme}
                   bg="transparent"
-                  hoverStyle={{ bg: '$color3' }}
+                  hoverStyle={{ bg: '$accent11' }}
                   pressStyle={{ scale: 0.98 }}
                   animation="quick"
                   justifyContent="flex-start"
@@ -301,6 +311,7 @@ export const HamburgerMenu = () => {
           </>
         )}
       </AnimatePresence>
+    </YStack>
     </Theme>
   )
 }

@@ -64,7 +64,7 @@ const accentLightPalette = [
   'hsla(32, 95%, 72%, 1)',
   'hsla(32, 95%, 74%, 1)',
   'hsla(32, 95%, 76%, 1)',
-  'hsla(32, 20%, 96%, 1)',
+  'hsla(39,100%,95%, 1)', // 明るいオレンジ
   'hsla(32, 20%, 98%, 1)',
 ]
 
@@ -132,7 +132,21 @@ const builtThemes = createThemes({
         md: { height: 46, borderRadius: 10, fontSize: 18 },
         lg: { height: 54, borderRadius: 12, fontSize: 20 },
       }
-    }
+    },
+    // ボタンも大きめに
+    Button: {
+      default: {
+        bg: '$accent1',
+        color: '$accent3',
+        borderWidth: 1,
+        borderColor: '$accent1',
+        borderRadius: 8,
+        hoverStyle: {
+          backgroundColor: '$accent9', // ホバー時の背景色（テーマトークンで指定）
+          cursor: 'pointer'            // ホバー時にポインターを表示
+        }
+      }
+    },
   },
 
   base: {
