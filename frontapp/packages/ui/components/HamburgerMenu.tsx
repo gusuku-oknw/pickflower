@@ -32,6 +32,7 @@ import {
   MailQuestion,
   ScrollText,
   UserX,
+  BookUser,
   FileEdit,
   Leaf,
   Calendar,
@@ -93,6 +94,13 @@ export const HamburgerMenu = () => {
     { icon: User, label: 'プロフィール', route: '/profile' },
     { icon: Settings, label: '設定', route: '/settings' }
   ]
+
+  {/* アイコンボタン定義 */}
+  const iconButtons = [
+    { label: 'お問い合わせ', path: '/contact', icon: <MailQuestion size="$5" color="$color11" />, },
+    { label: '利用規約', path: '/terms', icon: <ScrollText size="$5" color="$color11" />, },
+    { label: 'プライバシーポリシー', path: '/privacy', icon: <BookUser size="$5" color="$color11" />, },
+  ];
 
   // myAccount は認証情報からのフォールバック用。DBのデータがない場合に利用する
   const myAccount = {
@@ -223,68 +231,36 @@ export const HamburgerMenu = () => {
 
               {/* 新しいアイコンボタンエリア */}
               <XStack justifyContent="space-around" paddingTop="$3">
-                {/* お問い合わせ */}
-                <Tooltip placement="top">
-                  <Tooltip.Trigger>
-                    <Button
-                      onPress={() => navigateTo('/contact')}
-                      bg="transparent"
-                      size="$5"
-                      circular
-                      icon={<MailQuestion size="$5" color="$color11" />}
-                    />
-                  </Tooltip.Trigger>
-                  <Tooltip.Content>
-                    <Tooltip.Arrow />
-                    <Paragraph size="$2">お問い合わせ</Paragraph>
-                  </Tooltip.Content>
-                </Tooltip>
-
-                {/* 利用規約 */}
-                <Tooltip placement="top">
-                  <Tooltip.Trigger>
-                    <Button
-                      onPress={() => navigateTo('/terms')}
-                      bg="transparent"
-                      size="$5"
-                      circular
-                      icon={<ScrollText size="$5" color="$color11" />}
-                    />
-                  </Tooltip.Trigger>
-                  <Tooltip.Content>
-                    <Tooltip.Arrow />
-                    <Paragraph size="$2">利用規約</Paragraph>
-                  </Tooltip.Content>
-                </Tooltip>
-
-                {/* ログアウト */}
-                <Tooltip placement="top">
-                  <Tooltip.Trigger>
-                    <Button
-                      onPress={() => {
-                        console.log('ログアウト処理')
-                        navigateTo('/logout')
-                      }}
-                      bg="transparent"
-                      size="$5"
-                      circular
-                      icon={<UserX size="$5" color="$color11" />}
-                    />
-                  </Tooltip.Trigger>
-                  <Tooltip.Content>
-                    <Tooltip.Arrow />
-                    <Paragraph size="$2">ログアウト</Paragraph>
-                  </Tooltip.Content>
-                </Tooltip>
+                {iconButtons.map(({ label, path, icon }) => (
+                  <Tooltip placement="top" key={label}>
+                    <Tooltip.Trigger>
+                      <Button
+                        onPress={() => navigateTo(path)}
+                        bg="transparent"
+                        size="$5"
+                        circular
+                        icon={icon}
+                      />
+                    </Tooltip.Trigger>
+                    <Tooltip.Content>
+                      <Tooltip.Arrow />
+                      <Paragraph size="$2">{label}</Paragraph>
+                    </Tooltip.Content>
+                  </Tooltip>
+                ))}
               </XStack>
 
               {/* フッター部分 */}
               <YStack padding="$3" space="$4">
                 <Separator />
+
+                {/* ダークモード切り替えボタンのスタイルを流用したログアウト */}
                 <Button
-                  onPress={toggleTheme}
+                  onPress={() => {
+                    console.log('ログアウト処理');
+                    navigateTo('/logout');
+                  }}
                   bg="transparent"
-                  // hoverStyle={{ bg: '$accent11' }}
                   pressStyle={{ scale: 0.98 }}
                   animation="quick"
                   justifyContent="flex-start"
@@ -293,16 +269,14 @@ export const HamburgerMenu = () => {
                   borderRadius="$4"
                 >
                   <XStack alignItems="center" space="$3" width="100%">
-                    {isDarkMode ? (
-                      <Sun size="$4" color="$color11" />
-                    ) : (
-                      <Moon size="$4" color="$color11" />
-                    )}
+                    <UserX size="$4" color="$color11" />
                     <Text fontSize="$4" fontWeight="500" color="$color12">
-                      {isDarkMode ? 'ライトモード' : 'ダークモード'}
+                      ログアウト
                     </Text>
                   </XStack>
                 </Button>
+
+                {/* バージョン表示 */}
                 <Paragraph textAlign="center" fontSize="$3" color="$color10" paddingBottom="$2">
                   v1.0.0
                 </Paragraph>
