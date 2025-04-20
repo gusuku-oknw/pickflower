@@ -20,6 +20,33 @@ export async function fetchUserData(userId: string) {
   return data;
 }
 
+export async function fetchTermsData() {
+  const { data, error } = await supabase
+    .from('legal_documents.Terms')
+    .select('*')
+    .single();
+
+  if (error) {
+    console.error('fetchUserData エラー:', error);
+    throw error;
+  }
+  return data;
+}
+
+export async function fetchPolicyData() {
+  const { data, error } = await supabase
+    .from('legal_documents.Policy')
+    .select('*')
+    .single();
+
+  if (error) {
+    console.error('fetchUserData エラー:', error);
+    throw error;
+  }
+  return data;
+}
+
+
 /**
  * 新しいレコードを user_data テーブルに挿入する
  * @param {object} newRecord - 挿入したいデータのオブジェクト

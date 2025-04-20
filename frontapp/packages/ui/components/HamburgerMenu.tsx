@@ -202,7 +202,7 @@ export const HamburgerMenu = () => {
                     key={index}
                     onPress={() => navigateTo(item.route)}
                     bg="transparent"
-                    hoverStyle={{ bg: '$accent11' }}
+                    // hoverStyle={{ bg: '$accent11' }}
                     pressStyle={{ scale: 0.98, opacity: 0.9 }}
                     animation="quick"
                     justifyContent="flex-start"
@@ -284,7 +284,7 @@ export const HamburgerMenu = () => {
                 <Button
                   onPress={toggleTheme}
                   bg="transparent"
-                  hoverStyle={{ bg: '$accent11' }}
+                  // hoverStyle={{ bg: '$accent11' }}
                   pressStyle={{ scale: 0.98 }}
                   animation="quick"
                   justifyContent="flex-start"

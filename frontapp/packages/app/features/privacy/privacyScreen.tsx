@@ -1,12 +1,11 @@
-// packages/app/features/terms/TermsScreen.tsx
 'use client'
 
 import React, { useEffect, useState } from 'react'
 import { Theme, Spinner, YStack, Paragraph } from 'tamagui'
 import { MarkdownRenderer } from '../../../ui/components/MarkdownRenderer'
-import { fetchTermsData } from '../../../supabase/dbService'
+import { fetchPolicyData } from '../../../supabase/dbService'
 
-export function TermsScreen() {
+export function PolicyScreen() {
   const [md, setMd] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -14,7 +13,7 @@ export function TermsScreen() {
     async function loadData() {
       try {
         setLoading(true)
-        const data = await fetchTermsData()
+        const data = await fetchPolicyData()
         // fetchPolicyData は { content_md: string } を返す想定
         setMd(data.content_md)
       } catch (err) {
@@ -31,7 +30,7 @@ export function TermsScreen() {
       <YStack flex={1} padding="$4">
         <YStack flex={1} padding="$4" backgroundColor="$background">
           <Paragraph fontSize="$10" color="$text">
-            利用規約
+            プライバシーポリシー
           </Paragraph>
         </YStack>
       </YStack>
@@ -43,7 +42,7 @@ export function TermsScreen() {
         <MarkdownRenderer content={md} />
       ) : (
         <YStack flex={1} alignItems="center" justifyContent="center">
-          <Paragraph color="$error9">利用規約が見つかりません</Paragraph>
+          <Paragraph color="$error9">ポリシーが見つかりません</Paragraph>
         </YStack>
       )}
     </Theme>
