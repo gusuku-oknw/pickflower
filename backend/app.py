@@ -1,13 +1,19 @@
 # app.py など -------------------------------
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from comment_service import generate_image_comment
+
 import os, uuid
 from pathlib import Path
 
 app = FastAPI()
 
-origins = ["http://localhost:3000"]          # ← Next.js 開発サーバ
+fast_server = "http://localhost:8000"  # ← FastAPI 開発サーバの URL
+
+next_server = "http://localhost:3000"  # ← Next.js 開発サーバの URL
+origins = [next_server]          # ← Next.js 開発サーバ
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -44,6 +50,21 @@ def get_history(
         return []  # これ以上データはない
     return sample_history[offset:end]
 
+@app.get("/api/comments")
+async def comment_endpoint(file: UploadFile = File(...)):
+    # バリデーション
+    if file.content_type not in {"image/jpeg", "image/png"}:
+        raise HTTPException(status_code=400, detail="Invalid image type")
+    image_bytes = await file.read()
+
+    # コメント生成サービス呼び出し
+    try:
+        comment = await generate_image_comment(image_bytes)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Service error: {e}")
+
+    return JSONResponse({"comment": comment})
+
 # アップロードディレクトリの定義
 upload_dir = "uploads"
 os.makedirs(upload_dir, exist_ok=True)
@@ -66,13 +87,13 @@ async def upload_image(file: UploadFile = File(...)):
 
     # URL 用にパスを変換（スラッシュ形式）
     posix_path = file_path.as_posix()
-    url = f"http://localhost:8000/{posix_path}"
+    url = f"{fast_server}/{posix_path}"
     return {"url": url, "message": "アップロード完了"}
 
 # 削除エンドポイントの実装
 @app.delete("/delete")
 async def delete_file(path: str = Query(..., description="削除するファイルの URL")):
-    base_url = "http://localhost:8000/uploads/"
+    base_url = f"{fast_server}/uploads/"
     if not path.startswith(base_url):
         raise HTTPException(status_code=400, detail="無効なファイルパスです")
 

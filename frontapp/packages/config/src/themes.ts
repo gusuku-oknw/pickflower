@@ -141,6 +141,7 @@ const builtThemes = createThemes({
         borderWidth: 1,
         borderColor: '$accent1',
         borderRadius: 8,
+        hoverStyle: { backgroundColor: '$accent1' }
         // hoverStyle: {
         //   backgroundColor: '$accent9', // ホバー時の背景色（テーマトークンで指定）
         //   cursor: 'pointer'            // ホバー時にポインターを表示

@@ -38,6 +38,8 @@ import {
 
 import { useSupabaseAuth } from '../../../../packages/auth-next/hooks/useSupabaseAuth'
 
+const apiurl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
 /** 投稿データの型 */
 type PostItem = {
   id: number
@@ -275,7 +277,7 @@ export function HistoryScreen() {
     if (loading || !hasMore) return
     setLoading(true)
     try {
-      const res = await fetch(`http://localhost:8000/api/history?offset=${offset}&limit=5`)
+      const res = await fetch(`${apiurl}/api/history?offset=${offset}&limit=5`)
       if (!res.ok) throw new Error('Failed to fetch')
       const data: PostItem[] = await res.json()
       if (data.length === 0) {

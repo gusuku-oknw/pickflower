@@ -17,6 +17,7 @@ import {
   Sheet,
   Theme,
   ScrollView,
+  Spinner,
 } from 'tamagui'
 import {
   Upload,
@@ -28,6 +29,8 @@ import {
   MapPin,
   Tag,
   Smile,
+  Rocket,
+  Loader2
 } from '@tamagui/lucide-icons'
 import {
   ToastProvider,
@@ -150,6 +153,19 @@ export function PostScreen() {
     }
   }
 
+  const [captionGenerate, setCaptionGenerate] = useState('')
+  const [isLoading, setIsLoading] = useState(false) // 生成中フラグ :contentReference[oaicite:0]{index=0}
+
+  const handleGenerate = () => {
+    setIsLoading(true)                // スピナーON
+    // 2秒後に自動でスピナーOFFに
+    setTimeout(() => {
+      setIsLoading(false)             // スピナーOFF
+      // ここでダミーのキャプションをセットしても◎
+      // setCaption('これはダミー生成されたキャプションです。')
+    }, 2000)
+  }
+
   /* =============== UI =============== */
   return (
     <Theme name="light">
@@ -165,16 +181,20 @@ export function PostScreen() {
           <Separator />
 
           {/* tab switch */}
-          <XStack backgroundColor="$gray3" borderRadius="$6" overflow="hidden" marginVertical="$2">
+          <XStack borderRadius="$6" overflow="hidden" marginVertical="$2">
             {(['camera', 'gallery'] as const).map(tab => (
               <Button
                 key={tab}
                 flex={1}
                 size="$4"
                 bg={activeTab === tab ? '$accent5' : '$color0'}
-                color={activeTab === tab ? '$color1' : '$color1'}
+                hoverStyle={{ backgroundColor: activeTab === tab ? '$accent1' : '$accent3' }}
+                color={activeTab === tab ? '$accent5' : '$accent5'}
                 onPress={() => setActiveTab(tab)}
                 borderRadius={0}
+                borderWidth={2}                                           // 線の太さ
+                borderColor={activeTab === tab ? '$accent5' : '$color2'}   // 線の色
+                borderStyle="solid"                                       // 実線
                 fontWeight={activeTab === tab ? '600' : '400'}
               >
                 <XStack space="$2" alignItems="center">
@@ -213,6 +233,7 @@ export function PostScreen() {
                     size="$3"
                     borderRadius="$6"
                     bg="$accent5"
+                    hoverStyle={{ bg: '$accent1' }}
                     onPress={() =>
                       activeTab === 'camera'
                         ? cameraInputRef.current?.click()
@@ -231,7 +252,8 @@ export function PostScreen() {
                   </Text>
                   <Button
                     size="$2"
-                    theme="blue"
+                    bg="$accent5"
+                    hoverStyle={{ bg: '$accent1' }}
                     iconAfter={<Plus size="$1" />}
                     onPress={() =>
                       activeTab === 'camera'
@@ -290,30 +312,53 @@ export function PostScreen() {
             onChange={handleFileChange}
           />
 
-          {/* caption & extras */}
-          <YStack space="$3">
-            <TextArea
-              placeholder="キャプションを入力..."
-              value={caption}
-              onChangeText={setCaption}
-              minHeight={100}
-              bg="$accent11"
-              borderColor="$gray5"
-              borderWidth={1}
-              borderRadius="$4"
-              padding="$3"
-              backgroundColor="$gray1"
-            />
+          <YStack space="$3" width="100%">
+            {/* テキストエリアを包む相対配置コンテナ */}
+            <YStack position="relative" width="100%">
+              <TextArea
+                placeholder="キャプションを入力..."
+                value={caption}
+                onChangeText={setCaptionGenerate}
+                minHeight={100}
+                bg="$accent11"
+                borderColor="$gray5"
+                borderWidth={1}
+                borderRadius="$4"
+                padding="$3"
+                paddingRight="$9"      // ボタン分の右余白 :contentReference[oaicite:6]{index=6}
+                backgroundColor="$gray1"
+              />
 
+              <Button
+                onPress={handleGenerate}
+                disabled={isLoading}
+                // ローディング中は丸ボタンをやめて幅も広げる
+                circular={!isLoading}
+                width={isLoading ? '$auto' : 32}
+                px={isLoading ? '$3' : undefined}       // テキスト分の左右パディング
+                size={isLoading ? '$4' : '$3'}
+                position="absolute"
+                top="$3"
+                right="$3"
+              >
+                {isLoading ? (
+                  <XStack space="$2" alignItems="center" jc="center">
+                    <Spinner animation="spin" color="$accent1" />
+                    <Text>生成中…</Text>
+                  </XStack>
+                ) : (
+                  <Rocket />
+                )}
+              </Button>
+            </YStack>
+
+            {/* 追加ボタン群はそのまま */}
             <XStack space="$3" flexWrap="wrap">
               <Button size="$3" theme="gray" icon={MapPin} chromeless>
                 {location || '場所を追加'}
               </Button>
               <Button size="$3" theme="gray" icon={Tag} chromeless>
                 タグ付け
-              </Button>
-              <Button size="$3" theme="gray" icon={Smile} chromeless>
-                絵文字
               </Button>
             </XStack>
           </YStack>
@@ -340,7 +385,7 @@ export function PostScreen() {
           {/* post button */}
           <Button
             size="$5"
-            theme="blue"
+            bg="$accent9"
             icon={<Upload size="$1.5" />}
             onPress={handlePost}
             disabled={uploading || mediaFiles.length === 0}
@@ -359,7 +404,7 @@ export function PostScreen() {
               zIndex={-1}
               pointerEvents="none"
             >
-              <Stack colors={['$blue9', '$purple9']} start={[0, 0]} end={[1, 0]} fullscreen />
+              <Stack colors={['$color0', '$color0']} start={[0, 0]} end={[1, 0]} fullscreen />
             </Stack>
             投稿する
           </Button>

@@ -24,6 +24,8 @@ export async function fetchTermsData() {
   const { data, error } = await supabase
     .from('legal_documents.Terms')
     .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1)
     .single();
 
   if (error) {
@@ -37,6 +39,8 @@ export async function fetchPolicyData() {
   const { data, error } = await supabase
     .from('legal_documents.Policy')
     .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1)
     .single();
 
   if (error) {

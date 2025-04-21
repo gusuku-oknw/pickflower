@@ -37,7 +37,7 @@ import {
 
 export function ProfileScreen() {
   // useSupabaseAuth から認証状態やユーザー情報を取得
-  const { user, loading, error, signOut } = useSupabaseAuth()
+  const { user, loading, error } = useSupabaseAuth()
   const router = useRouter()
 
   // 単一のオブジェクトを期待するので初期値は null にする
@@ -312,7 +312,7 @@ export function ProfileScreen() {
 
           {/* ログアウトボタン */}
           <Button
-            onPress={signOut}
+            onPress={() => router.push('/logout')}
             backgroundColor="$background"
             color="$color"
             borderColor="$borderColor"
