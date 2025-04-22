@@ -247,7 +247,7 @@ export function ProfileScreen() {
                   size="$2"
                   backgroundColor="transparent"
                   color="$accent9"
-                  onPress={() => router.push('/posts')}
+                  onPress={() => router.push('/history')}
                   iconAfter={ChevronRight}
                 >
                   すべて見る

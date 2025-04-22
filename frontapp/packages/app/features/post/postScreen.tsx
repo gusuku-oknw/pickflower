@@ -318,7 +318,8 @@ export function PostScreen() {
               <TextArea
                 placeholder="キャプションを入力..."
                 value={caption}
-                onChangeText={setCaptionGenerate}
+                onChange={e => setCaption(e.target.value)}
+                multiline={true}
                 minHeight={100}
                 bg="$accent11"
                 borderColor="$gray5"
