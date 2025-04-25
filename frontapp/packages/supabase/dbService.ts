@@ -1,5 +1,6 @@
 // dbService.ts
-import { supabase } from './supabase'  // 事前に初期化した supabaseClient クライアント
+import { supabase } from './supabase'
+import { cont } from 'estree-util-is-identifier-name'  // 事前に初期化した supabaseClient クライアント
 
 /**
  * ユーザーIDに基づいて関連データ（例: user_data テーブル）を取得する
@@ -48,6 +49,34 @@ export async function fetchPolicyData() {
     throw error;
   }
   return data;
+}
+
+/**
+ * /history postsテーブルからデータを取得する
+ */
+export type PostItem = {
+  id: number
+  caption: string
+  imageUrl: string
+  date: string
+  likes: number
+  comments: number
+  saved: boolean
+}
+export async function fetchPostsData(
+  offset: number,
+  limit: number = 5
+): Promise<{ data: PostItem[]; error: Error | null }> {
+  const from = offset
+  const to = offset + limit - 1
+
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  return { data: data || [], error }
 }
 
 

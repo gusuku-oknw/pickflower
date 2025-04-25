@@ -12,17 +12,19 @@ export const PostOptionsSheet: React.FC<{ open: boolean; onClose: () => void; on
       <H2 textAlign="center" fontWeight="600" marginBottom="$2">投稿オプション</H2>
       <Separator />
       <YStack space="$3" marginTop="$2">
-        <Button icon={<Pen size="$1.5" />} size="$4.5" justifyContent="flex-start" chromeless>
-          投稿を編集
+        <Button icon={<Pen size="$1.5" />} size="$4" justifyContent="flex-start" chromeless>
+          <Text color="$color" fontSize={20}>投稿を編集</Text>
         </Button>
         <Button icon={<Download size="$1.5" />} size="$4" justifyContent="flex-start" chromeless>
-          <Text color="$blue10">画像を保存</Text>
+          <Text color="$color" fontSize={20}>画像を保存</Text>
         </Button>
         <Button icon={<Trash2 size="$1.5" color="$red10" />} size="$4" justifyContent="flex-start" chromeless onPress={onDelete}>
-          <Text color="$red10">投稿を削除</Text>
+          <Text color="$red10" fontSize={20}>投稿を削除</Text>
         </Button>
       </YStack>
-      <Button size="$4" theme="gray" marginTop="$2" onPress={onClose}>キャンセル</Button>
+      <Button bg="$accent11" size="$4" theme="gray" marginTop="$5" onPress={onClose}>
+        <Text color="$accent2" fontSize={22}>キャンセル</Text>
+      </Button>
     </Sheet.Frame>
   </Sheet>
 )

@@ -7,11 +7,14 @@ from comment_service import generate_image_comment
 
 import os, uuid
 from pathlib import Path
+from dotenv import load_dotenv
+# .env ファイルの読み込み
+load_dotenv()
 
-app = FastAPI()
+app = FastAPI(debug=True)
+
 
 fast_server = "http://localhost:8000"  # ← FastAPI 開発サーバの URL
-
 next_server = "http://localhost:3000"  # ← Next.js 開発サーバの URL
 origins = [next_server]          # ← Next.js 開発サーバ
 app.add_middleware(
@@ -21,34 +24,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ─────────────────────────────────────────────
-# テスト用ダミーデータを 30 件ほど用意
-sample_history = [
-    {
-        "id": i,
-        "caption": f"サンプル投稿 {i}",
-        "imageUrl": f"https://picsum.photos/300/200?random={i}",
-        "date": f"2023-10-{i:02d}",
-        "likes": 100 + i,
-        "comments": i * 3,
-        "saved": (i % 2 == 0),
-    }
-    for i in range(1, 31)
-]
-
-@app.get("/api/history")
-def get_history(
-    offset: int = Query(0, ge=0),
-    limit : int = Query(5, ge=1, le=20),
-):
-    """
-    offset / limit でデータを分割して返す。
-    limitはデフォルト5件、一度に最大20件までとする。
-    """
-    end = offset + limit
-    if offset >= len(sample_history):
-        return []  # これ以上データはない
-    return sample_history[offset:end]
 
 @app.get("/api/comments")
 async def comment_endpoint(file: UploadFile = File(...)):

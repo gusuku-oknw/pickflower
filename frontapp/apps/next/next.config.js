@@ -1,3 +1,7 @@
+const path = require('node:path')
+const dotenv = require('dotenv')
+dotenv.config({ path: path.resolve(__dirname, '.env') })
+
 /** @type {import('next').NextConfig} */
 const { withTamagui } = require('@tamagui/next-plugin')
 const { join } = require('node:path')
@@ -49,6 +53,12 @@ module.exports = () => {
     ],
     experimental: {
       scrollRestoration: true,
+    },
+    env: {
+      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     },
   }
 

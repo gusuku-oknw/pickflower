@@ -37,6 +37,7 @@ import {
   ToastViewport,
   useToastController,
 } from '@tamagui/toast'
+import { ApiKeyChecker } from './chack'
 
 /* ====================== 型定義 ====================== */
 type UploadedImage = {
