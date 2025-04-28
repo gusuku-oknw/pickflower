@@ -8,7 +8,7 @@ const configuration = new Configuration({
 })
 const openai = new OpenAIApi(configuration)
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function generateComment(req: NextApiRequest, res: NextApiResponse) {
   const { imageUrl } = req.body  // クライアントから送られてくる画像URL
 
   if (!imageUrl) {
