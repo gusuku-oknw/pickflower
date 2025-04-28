@@ -1359,6 +1359,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@callstack/async-storage@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@callstack/async-storage@npm:2.0.3"
+  dependencies:
+    lodash.merge: "npm:^4.6.0"
+  peerDependencies:
+    "@react-native-community/async-storage": ^1.5.0
+  checksum: 10/311d5ed89a1c9ee3814e444c976524a6aadffc8e11e420ff9f71ce37d9f91daf17252da5e9326fc3bd98103021138fd940fed38dcf8a3205c10d87a9ec78e859
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -11698,6 +11709,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.24.6"
     "@biomejs/biome": "npm:^1.9.3"
+    "@callstack/async-storage": "npm:^2.0.3"
     "@supabase/supabase-js": "npm:^2.49.4"
     "@tamagui/cli": "npm:^1.125.34"
     check-dependency-version-consistency: "npm:^4.1.0"
@@ -13841,7 +13853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.merge@npm:^4.6.2":
+"lodash.merge@npm:^4.6.0, lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 10/d0ea2dd0097e6201be083865d50c3fb54fbfbdb247d9cc5950e086c991f448b7ab0cdab0d57eacccb43473d3f2acd21e134db39f22dac2d6c9ba6bf26978e3d6
