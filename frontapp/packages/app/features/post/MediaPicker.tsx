@@ -80,7 +80,11 @@ export function MediaPicker({ activeTab, mediaFiles, onFileChange, onRemove }: P
                     src={URL.createObjectURL(file)}
                     width={120}
                     height={120}
-                    style={{ borderRadius: '8px' }}
+                    style={{
+                      borderRadius: '8px',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                    }}
                   />
                   <Button
                     position="absolute"
