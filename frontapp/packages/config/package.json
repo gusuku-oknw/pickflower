@@ -20,9 +20,9 @@
     "@tamagui/font-inter": "^1.125.34",
     "@tamagui/shorthands": "^1.125.34",
     "@tamagui/themes": "^1.125.34",
-    "tamagui": "^1.125.34"
+    "tamagui": "^1.126.4"
   },
   "devDependencies": {
-    "@tamagui/build": "^1.125.34"
+    "@tamagui/build": "^1.126.4"
   }
 }
