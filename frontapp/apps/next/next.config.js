@@ -16,6 +16,7 @@ const disableExtraction =
 
 const plugins = [
   withTamagui({
+    disableThemesBundleOptimize: true,
     config: '../../packages/config/src/tamagui.config.ts',
     components: ['tamagui', '@my/ui'],
     appDir: true,
