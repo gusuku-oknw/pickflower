@@ -40,7 +40,7 @@
     "tamagui":               "^1.126.4",
     "@callstack/async-storage": "^2.0.3",
     "@supabase/supabase-js": "^2.49.4",
-    "@tamagui/cli": "^1.125.34",
+    "@tamagui/cli": "^1.126.4",
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",
     "husky": "^9.1.6",

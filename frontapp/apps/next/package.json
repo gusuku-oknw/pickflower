@@ -14,7 +14,7 @@
     "@tamagui/babel-plugin": "^1.126.4",
     "@tamagui/config": "^1.126.4",
     "@tamagui/core": "^1.126.4",
-    "@tamagui/next-theme": "^1.125.34",
+    "@tamagui/next-theme": "^1.126.4",
     "app": "0.0.0",
     "mini-css-extract-plugin": "^2.9.1",
     "next": "14.2.14",
