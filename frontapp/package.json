@@ -40,6 +40,7 @@
     "check-dependency-version-consistency": "^4.1.0",
     "eslint": "^9.3.0",
     "husky": "^9.1.6",
+    "next": "14.2.14",
     "prettier": "^3.3.3",
     "react-markdown": "^10.1.0",
     "react-native-reanimated": "^3.17.3",
