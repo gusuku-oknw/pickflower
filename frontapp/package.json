@@ -6,6 +6,7 @@
     "./packages/*"
   ],
   "scripts": {
+    "vercel-build": "cd apps/next && yarn install && next build && yarn next",
     "native": "cd apps/expo && yarn start",
     "native:prebuild": "cd apps/expo && yarn prebuild",
     "ios": "cd apps/expo && yarn ios",
@@ -15,7 +16,7 @@
     "web": "yarn build && cd apps/next && yarn next",
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:prod": "yarn workspace next-app build",
-    "web:prod:serve": "cd apps/next && yarn build && next start -H 0.0.0.0 -p ${PORT:-3000}",
+    "web:prod:serve": "cd apps/next && next start -H 0.0.0.0 -p ${PORT:-3000}",
     "postinstall": "yarn check-tamagui && yarn build",
     "build": "yarn workspaces foreach --all --exclude next-app run build",
     "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
@@ -34,6 +35,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
+    "@tamagui/babel-plugin": "^1.126.4",
+    "@tamagui/build":        "^1.126.4",
+    "tamagui":               "^1.126.4",
     "@callstack/async-storage": "^2.0.3",
     "@supabase/supabase-js": "^2.49.4",
     "@tamagui/cli": "^1.125.34",
