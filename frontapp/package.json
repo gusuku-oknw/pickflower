@@ -6,6 +6,7 @@
     "./packages/*"
   ],
   "scripts": {
+    "vercel-build": "cd apps/next && yarn install && next build",
     "native": "cd apps/expo && yarn start",
     "native:prebuild": "cd apps/expo && yarn prebuild",
     "ios": "cd apps/expo && yarn ios",
